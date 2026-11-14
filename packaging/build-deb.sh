@@ -327,6 +327,7 @@ mkdir -p "$OUT"
 DEB="$OUT/${PKG}_${DEB_VERSION}_amd64.deb"
 # -Zxz: ~200 MB of binary compresses hard, and this is served from R2 to every
 # installing machine.
+chmod -R go-w "$STAGE"   # never ship group/other-writable files, whatever the source tree or umask was
 dpkg-deb --build --root-owner-group -Zxz "$STAGE" "$DEB" >/dev/null
 rm -rf "$STAGE"
 

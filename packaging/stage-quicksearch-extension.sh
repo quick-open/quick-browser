@@ -33,7 +33,7 @@ REPO="$(cd "$HERE/.." && pwd)"
 ROOT="$(cd "$REPO/../.." && pwd)"
 
 EXT_SRC="$REPO/extensions/quicksearch"
-KEY="$ROOT/ca/apt/private/quicksearch-extension-signing.pem"
+KEY="${QUICKSEARCH_EXTENSION_KEY:-${QUICKOPEN_KEYSTORE:-/var/lib/quickopen-keys}/quicksearch-extension-signing.pem}"   # key store (build box); was $ROOT/ca/apt/private/
 PACKER="$ROOT/ca/scripts/pack-crx3.py"
 
 [ -d "$EXT_SRC" ] || { echo "no extension source at $EXT_SRC"; exit 1; }

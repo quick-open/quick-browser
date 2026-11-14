@@ -41,7 +41,7 @@ ROOT="$(cd "$REPOS/.." && pwd)"
 
 SV_REPO="$REPOS/securevault"
 EXT_SRC="$SV_REPO/extension"
-KEY="$ROOT/ca/apt/private/securevault-extension-signing.pem"
+KEY="${SECUREVAULT_EXTENSION_KEY:-${QUICKOPEN_KEYSTORE:-/var/lib/quickopen-keys}/securevault-extension-signing.pem}"   # key store (build box); was $ROOT/ca/apt/private/
 PACKER="$ROOT/ca/scripts/pack-crx3.py"
 
 [ -d "$EXT_SRC" ] || { echo "no extension source at $EXT_SRC"; exit 1; }

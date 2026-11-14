@@ -3,7 +3,7 @@
   "name": "Quick Search Setup",
   "version": "1.0.2",
   "description": "Explains why address-bar search is off by default in Quick Browser, and lets you choose a search provider.",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAndGxTUrTghacyfRrgyqUHrdfr3b9Wel/c5Tfcyw99tylReoZgw7WeOd9CbmZnzXT1RxEbpOq790WkXAeFzs090pW7xN4VDZh+xH7tSateKerB371zLhVg7KA6OV9pGLDKVu2jyk6U76w+y2LOkVG2HViqImhZ4OdQbDZ0Ue6YlNTC7jjn9FDan+61aewxXDEayRXbGwIHsTc/GoorikcXMge0hsoBmsNkbVeBEofChjnCGD0b8w/mapxp6uI22iMJfCJR4O5BqOwf5eK7/QhPQglEQysWb8sREPgfO0xMMo63SiPH387vKbggBhYVMKNy1oEHV/Yck/G9+X5Tk8LGwIDAQAB",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAumfUarQQ6pmsEyLaRI3kAr5HkQTgWgn8alAaPLxHjDbDKaZAOFaeTxAKaraGn3NIuLWd0BEa5qEqLG8YiyZ7eGLrDMNTWaRrSqXlwa5Hew9PkWiJKe5EMK0ZsnR3hy3LbF7IoA8ESFlWbWodveCrVzC6DbWrU4ggUQtt/O9hh4XxNgLJctOMgXnIg1KioiodeL1DnfuincMts6CiWapoKimLI2FlAxAK0U7hU8Aik0peLcbnsvgUP6UZiG1slkrsl8vWTKix7wUlzcXRHeJ74evQ3lpZsxgyijYe0VHnc8efkxGPWNXin2eR4VWhZS6UKeH0SGXnXaAOHSjenxB8VwIDAQAB",
   "permissions": [
     "webNavigation",
     "tabs"

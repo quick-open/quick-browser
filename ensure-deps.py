@@ -135,7 +135,12 @@ def install(src, path, bucket, obj, force):
             os.remove(tmp)
             return "FAILED checksum (got %s)" % got[:16]
 
-    if name.endswith((".tar.gz", ".tgz", ".tar.xz", ".tar.bz2", ".tar")):
+    # Some GCS deps (the Debian sysroot) are tarballs stored under their bare
+    # sha256 with no output_file, so the name carries no extension. Decide by
+    # content as well, or the archive is left unpacked and gn gen fails later
+    # with "Directory does not exist: .../sysroot/usr/include/".
+    if name.endswith((".tar.gz", ".tgz", ".tar.xz", ".tar.bz2", ".tar")) \
+            or tarfile.is_tarfile(tmp):
         try:
             with tarfile.open(tmp) as tf:
                 tf.extractall(dest)                # noqa: S202
