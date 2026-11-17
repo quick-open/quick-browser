@@ -39,14 +39,31 @@ if [ "$CURRENT" != "$CHROMIUM_TAG" ]; then
   # The checkout is shallow (--no-history), so the tag has to be fetched
   # explicitly; a plain `git checkout <tag>` cannot find it.
   git fetch --depth 1 origin "refs/tags/$CHROMIUM_TAG:refs/tags/$CHROMIUM_TAG"
-  git checkout -q --detach "refs/tags/$CHROMIUM_TAG"
+  # -f: the tree carries the previous round's patches, branding and domain
+  # substitution plus untracked DEPS leftovers, and the pristine restore below
+  # runs only AFTER this switch, so a plain checkout refuses every version bump.
+  git checkout -f -q --detach "refs/tags/$CHROMIUM_TAG"
   echo "   now $(tr '\n' '.' < chrome/VERSION | sed 's/[A-Z]*=//g; s/\.$//')"
   # DEPS pins every dependency per revision, so they must be re-synced to the
   # tag's versions. Without this the tree is Chromium 151 with 153's deps.
-  echo "== syncing dependencies to the tag (slow)"
-  gclient sync --no-history --force --reset
 else
   echo "   already at the pinned tag"
+fi
+# Sync DEPS whenever no COMPLETED sync for this tag is recorded — not only when
+# the version changed. A sync that dies part-way (2026-11-17: proxy refused two
+# hosts) leaves src/ at the new tag with old dependencies, and the next run
+# used to skip the sync and fail later in gn on stale third_party trees.
+SYNCMARK="$WORK/.deps-synced-$CHROMIUM_TAG"
+if [ ! -f "$SYNCMARK" ]; then
+  echo "== syncing dependencies to the tag (slow)"
+  # A previous round's patches/pruning can have deleted tracked files that DEPS
+  # reads (e.g. android-webview-*.orderfile.txt version files), and gclient then
+  # dies parsing DEPS. Reset src/ itself first; --reset handles the DEPS repos.
+  git reset -q --hard HEAD
+  gclient sync --no-history --force --reset
+  touch "$SYNCMARK"
+else
+  echo "   dependencies already synced for $CHROMIUM_TAG"
 fi
 
 echo "== ungoogled-chromium $UNGOOGLED_TAG"

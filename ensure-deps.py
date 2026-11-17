@@ -148,7 +148,15 @@ def install(src, path, bucket, obj, force):
             return "FAILED extract (%s)" % exc
         os.remove(tmp)
     else:
-        os.replace(tmp, os.path.join(dest, name))
+        out = os.path.join(dest, name)
+        os.replace(tmp, out)
+        # A bare GCS object arrives with the download's 0644 mode. gclient sets
+        # the executable bit on binaries; do the same for ELF files, or tools
+        # the build runs fail with EACCES (Chromium 157: cc_bindings_from_rs
+        # spawns buildtools/linux64-format/clang-format).
+        with open(out, "rb") as fh:
+            if fh.read(4) == b"\x7fELF":
+                os.chmod(out, os.stat(out).st_mode | 0o111)
 
     with open(stamp, "w", encoding="utf-8") as fh:
         fh.write(obj["object_name"] + "\n")

@@ -148,7 +148,12 @@ def main():
 
     # 2. strings. Keep a pristine copy the first time so re-runs rewrite from
     #    upstream rather than from our own output.
-    orig = grd + ".upstream"
+    #    The stash is PER CHROMIUM VERSION: a plain ".upstream" survived the
+    #    151 -> 157 bump (untracked file) and 157 was branded from 151's strings
+    #    (duplicate IDS_AI_MODE_ENTRYPOINT_LABEL broke the compile, 2026-11-17).
+    ver = ".".join(l.split("=", 1)[1].strip() for l in
+                   open(os.path.join(src, "chrome", "VERSION")) if "=" in l)
+    orig = grd + ".upstream-" + ver
     if not os.path.exists(orig):
         os.replace(grd, orig)
     text = open(orig, encoding="utf-8").read()
