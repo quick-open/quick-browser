@@ -166,6 +166,19 @@ python3 "$UG/utils/patches.py" apply "$SRC" "$UG/patches" \
 echo "== pruning binaries ungoogled flags as non-free"
 python3 "$UG/utils/prune_binaries.py" "$SRC" "$UG/pruning.list" || true
 
+echo "== domain substitution (Google hostnames -> non-resolving names)"
+# Quick OS 1.0.3 (owner 2026-11-16): the patches switch every Google service
+# off, but without this step the real hostnames (update.googleapis.com, ...)
+# stay in the binary behind a single patch each. Substitution makes any code
+# path the patches missed resolve to nothing. Its cache records the originals
+# so `domain_substitution.py revert` can undo it; a fresh cache per run (the
+# pristine-tree restore above already undid the previous one).
+DS_CACHE="$WORK/domsubcache.tar.gz"
+rm -f "$DS_CACHE"
+python3 "$UG/utils/domain_substitution.py" apply -r "$UG/domain_regex.list" \
+  -f "$UG/domain_substitution.list" -c "$DS_CACHE" "$SRC" \
+  || { echo "!! domain substitution failed - do NOT build this tree"; exit 1; }
+
 echo
 echo "== source ready"
 echo "   chromium   $(tr '\n' '.' < "$SRC/chrome/VERSION" | sed 's/[A-Z]*=//g; s/\.$//')"

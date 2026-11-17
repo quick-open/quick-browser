@@ -134,6 +134,19 @@ Section "Quick Browser"
   WriteRegStr HKLM "Software\Classes\${APPKEY}HTML\DefaultIcon" "" "$INSTDIR\quick-browser.ico,0"
   WriteRegStr HKLM "Software\Classes\${APPKEY}HTML\shell\open\command" "" '"$INSTDIR\chrome.exe" -- "%1"'
   WriteRegStr HKLM "Software\RegisteredApplications" "${APPNAME}" "Software\Clients\StartMenuInternet\${APPKEY}\Capabilities"
+  ; Quick OS 1.0.3 no-egress round: the same managed privacy policy the Linux
+  ; package ships (/etc/chromium/policies/managed/quick-browser-privacy.json).
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "ComponentUpdatesEnabled" 0
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "MetricsReportingEnabled" 0
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "SafeBrowsingProtectionLevel" 0
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "SpellCheckServiceEnabled" 0
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "TranslateEnabled" 0
+  WriteRegStr HKLM "Software\Policies\Chromium" "DnsOverHttpsMode" "off"
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "AlternateErrorPagesEnabled" 0
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "DomainReliabilityAllowed" 0
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "UrlKeyedAnonymizedDataCollectionEnabled" 0
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "SyncDisabled" 1
+  WriteRegDWORD HKLM "Software\Policies\Chromium" "BrowserSignin" 0
 SectionEnd
 
 !endif   ; UNINSTALLER_ONLY
@@ -146,6 +159,18 @@ Section "Uninstall"
   DeleteRegValue HKLM "Software\RegisteredApplications" "${APPNAME}"
   DeleteRegKey HKLM "Software\Classes\${APPKEY}HTML"
   DeleteRegKey HKLM "Software\Clients\StartMenuInternet\${APPKEY}"
+  ; our policy values only: an administrator's own Chromium policies stay
+  DeleteRegValue HKLM "Software\Policies\Chromium" "ComponentUpdatesEnabled"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "MetricsReportingEnabled"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "SafeBrowsingProtectionLevel"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "SpellCheckServiceEnabled"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "TranslateEnabled"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "DnsOverHttpsMode"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "AlternateErrorPagesEnabled"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "DomainReliabilityAllowed"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "UrlKeyedAnonymizedDataCollectionEnabled"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "SyncDisabled"
+  DeleteRegValue HKLM "Software\Policies\Chromium" "BrowserSignin"
   DeleteRegKey HKLM "${UNINSTKEY}"
   ; user profiles (%LOCALAPPDATA%\Chromium) are the user's and are left alone
   RMDir /r "$INSTDIR"

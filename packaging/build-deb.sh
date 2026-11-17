@@ -205,6 +205,32 @@ fi
 # nothing says the silence was on purpose (owner field report 2026-08-19).
 "$HERE/stage-quicksearch-extension.sh" "$STAGE"
 
+# ------------------------------------------------------- managed privacy policy
+# Quick OS 1.0.3 (owner 2026-11-16, no-egress audit): the ungoogled patches and
+# domain substitution already disable these services; the policy is the second
+# lock, so no future patch-rebase gap can switch one back on silently. Chromium
+# reads managed policy from /etc/chromium/policies/managed/ (the same system
+# paths the extension and native-host files above use).
+mkdir -p "$STAGE/etc/chromium/policies/managed"
+cat > "$STAGE/etc/chromium/policies/managed/quick-browser-privacy.json" <<'POLICY'
+{
+  "ComponentUpdatesEnabled": false,
+  "MetricsReportingEnabled": false,
+  "SafeBrowsingProtectionLevel": 0,
+  "SpellCheckServiceEnabled": false,
+  "TranslateEnabled": false,
+  "DnsOverHttpsMode": "off",
+  "AlternateErrorPagesEnabled": false,
+  "DomainReliabilityAllowed": false,
+  "UrlKeyedAnonymizedDataCollectionEnabled": false,
+  "SyncDisabled": true,
+  "BrowserSignin": 0
+}
+POLICY
+chmod 0644 "$STAGE/etc/chromium/policies/managed/quick-browser-privacy.json"
+python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$STAGE/etc/chromium/policies/managed/quick-browser-privacy.json" \
+  || { echo "managed policy JSON does not parse"; exit 1; }
+
 # ---------------------------------------------------------------- the licences
 # BSD-3-Clause obliges us to carry the copyright notice and the third-party
 # inventory. about:credits inside the binary is the primary discharge of that;

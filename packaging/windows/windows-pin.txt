@@ -9,9 +9,9 @@
 #
 # sha256 is self-recorded at first fetch (the project publishes no checksum
 # asset); any later re-download must match it.
-tag=151.0.7922.108-1.1
-url=https://github.com/ungoogled-software/ungoogled-chromium-windows/releases/download/151.0.7922.108-1.1/ungoogled-chromium_151.0.7922.108-1.1_windows_x64.zip
-sha256=734c87f3d2c07bde8f904ea02f57903a0a9c9ecf8edecd2f91b144b7805c3328
+tag=157.0.8103.78-1.1
+url=https://github.com/ungoogled-software/ungoogled-chromium-windows/releases/download/157.0.8103.78-1.1/ungoogled-chromium_157.0.8103.78-1.1_windows_x64.zip
+sha256=2b1d113b055f827b573cd1fa2bc46511691c0aa427802397cfc05e52350ef212
 
 # BRANDED PAYLOAD EXE (field defect fix): the Windows taskbar shows the
 # window icon, which comes from chrome.exe's OWN icon-resource group — so the
